@@ -16,7 +16,7 @@ export const AppRouter = () => {
       <Routes>
         <Route path="/pizzas" element={<PizzaScreen />}/>
         <Route path="/toppings" element={<ToppingScreen />}/>
-        <Route path="*" element={<Navigate to ="/pizzas" />}/>
+        <Route path="*" element={<Navigate to ="/toppings" />}/>
       </Routes>
     </Router>
   )
