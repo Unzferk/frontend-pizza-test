@@ -1,40 +1,78 @@
 import React from 'react';
 import { useEffect, useState } from "react";
-import { PizzaCard } from './PizzaCard';
+import { PizzaAddForm } from './PizzaAddForm';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+
 
 
 export const PizzaScreen = () => {
+  const urlPizzas = "http://localhost:4000/api/pizzas";
+  const urlToppings = "http://localhost:4000/api/toppings";
 
-  const [post, setPost] = useState([]);
+  const [pizzas, setPizzas] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/pizzas")
-      .then(response => response.json())
-      .then(data => {
-        if (data) {
-          console.log(data.pizzas);
-          setPost(data.pizzas);
-        }
-      });
+    onGetPizzas()
   }, []);
 
+  const onGetPizzas = async () => {
+    const resp = await axios.get(urlPizzas);
+    if (resp.status === 200) {
+      setPizzas(resp.data.pizzas)
+    }
+  }
+
+  const onDeletePizzaDB = async (id) => {
+    if (window.confirm("Do you really want to delete the item?")) {
+      const resp = await axios.delete(`${urlPizzas}/${id}`);
+      if (resp.status === 200) {
+        window.alert("Item has been deleted");
+        onGetPizzas();
+      }
+    }
+  }
   return (
     <>
       <div className='container mt-3'>
 
-        <div className='row '>
-          <form className="row g-3 d-flex justify-content-end">
-            <div className="col-auto">
-              <input type="text" className="form-control-plaintext" id="name" value="" placeholder='Name' />
-            </div>
-            <div className="col-auto">
-              <button type="submit" className="btn btn-primary mb-3">Create</button>
-            </div>
-          </form>
+        <div className='row'>
+          <PizzaAddForm onGetPizzas={onGetPizzas}/>
         </div>
 
         <div className='row d-flex row-cols-auto'>
-          {post && post.map(e => (<PizzaCard key={e.id} name={e.name} toppings={e.toppings}/> ))}
+          <table className="table table-sm table-hover col-8 ">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Pizza Toppings</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              {pizzas && pizzas.map((pizza, i) => {
+                return (
+                  <tr key={pizza._id}>
+                    <th scope="row" >{i}</th>
+                    <td >{pizza.name}</td>
+                    <td >
+                      <ul>
+                        {pizza.toppings && 
+                        pizza.toppings.map(topp=>(<li key={topp._id}>{topp.name}</li>))}
+                      </ul>
+                    </td>
+                    <td>
+                      <Link to={`/pizzas/toppings/${pizza._id}`} ><button className='btn btn-info mx-1'>Edit</button> </Link>
+                      
+                      <button className='btn btn-danger mx-1' onClick={() => onDeletePizzaDB(pizza._id)}>Delete</button>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
         </div>
         
       </div>

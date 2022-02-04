@@ -1,5 +1,6 @@
 import React from 'react';
 
+//show a pizza info as a card
 export const PizzaCard = ({_id,name,toppings=[]}) => {
   return (
     <>
