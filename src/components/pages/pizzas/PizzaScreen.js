@@ -1,7 +1,12 @@
+import React from 'react';
+
+export const PizzaScreen = () => {
+  return (
+    <h1>PIZZA SCREEN</h1>  
+  )
+};
+/*
 import { useEffect, useState } from "react";
-
-function App() {
-
   const [post, setPost] = useState([]);
 
   useEffect(() => {
@@ -26,6 +31,5 @@ function App() {
       
     </>
   );
-}
 
-export default App;
+*/

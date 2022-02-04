@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import PizzaApp from './PizzaApp';
 
 
 ReactDOM.render(
-  <App />,
+  <PizzaApp />,
   document.getElementById('root')
 );
 
